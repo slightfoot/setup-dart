@@ -57,7 +57,8 @@ echo "Downloading ${URL}..."
 
 # Download installation zip.
 curl --connect-timeout 15 --retry 5 "$URL" > "${HOME}/dartsdk.zip"
-unzip "${HOME}/dartsdk.zip" -d "${RUNNER_TOOL_CACHE}" > /dev/null
+mkdir -p "${RUNNER_TOOL_CACHE}/${CHANNEL}"
+unzip -o "${HOME}/dartsdk.zip" -d "${RUNNER_TOOL_CACHE}/${CHANNEL}" > /dev/null
 if [ $? -ne 0 ]; then
   echo -e "::error::Download failed! Please check passed arguments."
   exit 1
@@ -69,8 +70,8 @@ echo "PUB_CACHE=${HOME}/.pub-cache" >> $GITHUB_ENV
 
 # Update paths.
 echo "${HOME}/.pub-cache/bin" >> $GITHUB_PATH
-echo "${RUNNER_TOOL_CACHE}/dart-sdk/bin" >> $GITHUB_PATH
+echo "${RUNNER_TOOL_CACHE}/${CHANNEL}/dart-sdk/bin" >> $GITHUB_PATH
 
 # Report success, and print version.
 echo -e "Succesfully installed Dart SDK:"
-${RUNNER_TOOL_CACHE}/dart-sdk/bin/dart --version
+${RUNNER_TOOL_CACHE}/${CHANNEL}/dart-sdk/bin/dart --version
